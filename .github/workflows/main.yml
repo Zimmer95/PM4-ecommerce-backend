@@ -24,8 +24,8 @@ jobs:
       name: Build And Push
       uses: docker/build-push/action@v5
       with:
-        context: ./ecommerce-zimmer95
-        file: ./Dockerfile
+        context: .
+        file: ./ecommerce-zimmer95/Dockerfile
         push: true
         tags: ${{ secrets.DOCKERFILE_USERNAME }}/ecommerce:latests
         
