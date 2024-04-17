@@ -1,0 +1,14 @@
+# Ignorar archivos de respaldo
+*~
+
+# Ignorar archivos de caché
+.cache/
+
+# Ignorar archivos de registro
+*.log
+
+# Ignorar archivos específicos
+archivo-secreto.txt
+
+# Ignorar directorios específicos
+node_modules/
