@@ -6,8 +6,8 @@ COPY ./package*.json ./
 
 RUN npm install
 
-COPY . ./
+COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+CMD ["/bin/bash", "-c", "npm run migrations:generate src/migrations/initial_on_render && npm run migration:run && npm run start"]
