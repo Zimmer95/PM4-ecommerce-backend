@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app-ecommerce-zimmer95:
-    build: ./
+    image: zimmer95/ecommerce:latest
     ports:
       - "3000:3000"
     env_file:
