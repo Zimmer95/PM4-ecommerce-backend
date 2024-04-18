@@ -2,11 +2,11 @@ FROM node
 
 WORKDIR /app
 
-COPY ./ package*.json ./
+COPY ./ecommerce-zimmer95/package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY . ./
 
 EXPOSE 3000
 
