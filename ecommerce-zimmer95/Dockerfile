@@ -6,7 +6,7 @@ COPY ./ecommerce-zimmer95/package*.json ./
 
 RUN npm install
 
-COPY . ./
+COPY . ./ecommerce-zimmer95
 
 EXPOSE 3000
 
