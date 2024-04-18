@@ -2,7 +2,7 @@ FROM node
 
 WORKDIR /app
 
-COPY ./ecommerce-zimmer95/package*.json ./
+COPY ./package*.json ./
 
 RUN npm install
 
