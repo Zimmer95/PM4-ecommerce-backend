@@ -15,7 +15,7 @@ export class AuthController {
 
   @Get()
   getAdminUser(@Body() user: CreateAdminDto) {
-    user.role = process.env.ADMIN_ROLE
+    user.role = Boolean(process.env.ADMIN_ROLE)
     user.name= process.env.ADMIN_USERNAME
     user.email= process.env.ADMIN_EMAIL
     user.password= process.env.ADMIN_PASSWORD
