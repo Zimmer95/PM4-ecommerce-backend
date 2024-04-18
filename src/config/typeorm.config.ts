@@ -13,7 +13,7 @@ const TypeOrmConfig = {
   entities: ["dist/entities/*.entity{.ts,.js}"],
   migrations: ["dist/migrations/*{.ts,.js}"],
   autoLoadEntities: true,
-  synchronize: false,
+  synchronize: true,
   logging: true,
 };
 
