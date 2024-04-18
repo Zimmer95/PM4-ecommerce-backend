@@ -26,7 +26,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile
+          file: ./ecommerce-zimmer95/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/ecommerce:latest
 
