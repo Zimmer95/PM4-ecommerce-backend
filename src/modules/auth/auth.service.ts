@@ -5,6 +5,7 @@ import { AuthUserDto } from "src/dtos/authUser.dto";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { CreateUserDto } from "src/dtos/createUser.dto";
+import { CreateAdminDto } from "src/dtos/createAdmin.dto";
 
 @Injectable()
 export class AuthService {
@@ -12,6 +13,14 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService
   ) {}
+
+  async createAdmin(user: CreateAdminDto) {
+    if (await this.usersService.getUserByEmail(user.email)) {
+      throw new BadRequestException("The user is already registered");
+    }
+    const newUser = await this.usersService.createAdmin(user);
+    return newUser;
+  }
 
   async signUp(user: CreateUserDto) {
     if (await this.usersService.getUserByEmail(user.email)) {

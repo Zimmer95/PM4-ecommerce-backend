@@ -19,7 +19,7 @@ export class AuthController {
     user.name= process.env.ADMIN_USERNAME
     user.email= process.env.ADMIN_EMAIL
     user.password= process.env.ADMIN_PASSWORD
-    return this.authService.signUp(user),"  Estamos del otro lado";
+    return this.authService.createAdmin(user),"  Estamos del otro lado";
   }
 
   @Post("signup")

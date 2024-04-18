@@ -10,6 +10,7 @@ import * as bcrypt from "bcrypt";
 import { Users } from "src/entities/users.entity";
 import { Repository } from "typeorm";
 import { UpdateUserDto } from "src/dtos/updateUsers.dto";
+import { CreateAdminDto } from "src/dtos/createAdmin.dto";
 
 @Injectable()
 export class UsersRepository {
@@ -65,8 +66,6 @@ export class UsersRepository {
     if (!foundUser) {
       throw new NotFoundException("User not found");
     }
-    /* const { password, role, ...thisUser } = foundUser; */
-
     return foundUser;
   }
 
@@ -101,11 +100,6 @@ export class UsersRepository {
       throw new BadRequestException("User not found");
     }
     const { password, role, ...thisUser } = foundUser;
-    /*foundUser.address = address;
-    foundUser.city = city;
-    foundUser.country = country;
-    foundUser.name = name;
-    foundUser.phone = phone;*/
 
     Object.assign(thisUser, user);
     const updatedUser = await this.usersRepository.save(thisUser);
@@ -114,5 +108,30 @@ export class UsersRepository {
   }
   async deleteUser(id: string) {
     return this.usersRepository.delete(id);
+  }
+
+  async createAdmin(user: CreateAdminDto) {
+    const foundUser = await this.usersRepository.findOne({
+      where: { email: user.email },
+    });
+
+    if (foundUser) {
+      throw new NotFoundException("The user is already registered");
+    }
+
+    const newUser = this.usersRepository.create(user);
+    const hashedPassword = await bcrypt.hash(newUser.password, 10);
+
+    if (!hashedPassword) {
+      throw new BadRequestException("Password could not be hashed");
+    }
+
+    const now = new Date();
+    newUser.createdAt = now;
+    newUser.password = hashedPassword;
+
+    const { role, ...thisUser } = await this.usersRepository.save(newUser);
+
+    return thisUser;
   }
 }
