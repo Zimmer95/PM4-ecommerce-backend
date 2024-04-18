@@ -14,14 +14,6 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  async createAdmin(user: CreateAdminDto) {
-    if (await this.usersService.getUserByEmail(user.email)) {
-      throw new BadRequestException("The user is already registered");
-    }
-    const newUser = await this.usersService.createAdmin(user);
-    return newUser;
-  }
-
   async signUp(user: CreateUserDto) {
     if (await this.usersService.getUserByEmail(user.email)) {
       throw new BadRequestException("The user is already registered");

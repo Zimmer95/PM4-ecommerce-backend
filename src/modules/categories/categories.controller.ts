@@ -19,6 +19,7 @@ export class CategoriesController {
   preloadCategories() {
     return this.categoriesService.preloadCategories();
   }
+
   @Get()
   getCategories(@Query("name") name?: string) {
     if (name) {
@@ -26,6 +27,7 @@ export class CategoriesController {
     }
     return this.categoriesService.getCategories();
   }
+  
   @Post()
   @UseGuards(RolesGuard)
   @Roles(Role.admin)

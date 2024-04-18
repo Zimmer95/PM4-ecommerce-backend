@@ -109,29 +109,4 @@ export class UsersRepository {
   async deleteUser(id: string) {
     return this.usersRepository.delete(id);
   }
-
-  async createAdmin(user: CreateAdminDto) {
-    const foundUser = await this.usersRepository.findOne({
-      where: { email: user.email },
-    });
-
-    if (foundUser) {
-      throw new NotFoundException("The user is already registered");
-    }
-
-    const newUser = this.usersRepository.create(user);
-    const hashedPassword = await bcrypt.hash(newUser.password, 10);
-
-    if (!hashedPassword) {
-      throw new BadRequestException("Password could not be hashed");
-    }
-
-    const now = new Date();
-    newUser.createdAt = now;
-    newUser.password = hashedPassword;
-
-    const { role, ...thisUser } = await this.usersRepository.save(newUser);
-
-    return thisUser;
-  }
 }

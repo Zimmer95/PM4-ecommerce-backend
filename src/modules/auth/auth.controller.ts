@@ -13,16 +13,6 @@ dotenvConfig({ path: ".env.development" });
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get()
-  getAdminUser() {
-    const user = new Users()
-    user.role = Boolean(process.env.ADMIN_ROLE)
-    user.name= process.env.ADMIN_USERNAME
-    user.email= process.env.ADMIN_EMAIL
-    user.password= process.env.ADMIN_PASSWORD
-    return this.authService.createAdmin(user),"  Estamos del otro lado";
-  }
-
   @Post("signup")
   signUp(@Body() user: CreateUserDto) {
     return this.authService.signUp(user);

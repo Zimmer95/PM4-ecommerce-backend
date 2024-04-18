@@ -28,9 +28,6 @@ export class UsersService {
   addUser(user: CreateUserDto) {
     return this.usersRepository.addUser(user);
   }
-  createAdmin(user: CreateAdminDto) {
-    return this.usersRepository.createAdmin(user);
-  }
 
   updateUser(id: string, user: UpdateUserDto) {
     return this.usersRepository.updateUser(user, id);
