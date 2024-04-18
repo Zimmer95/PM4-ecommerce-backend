@@ -8,7 +8,7 @@ RUN npm install
 
 COPY . .
 
-RUN npm run migration:run
+RUN npm run migrations:run
 
 EXPOSE 3000
 
