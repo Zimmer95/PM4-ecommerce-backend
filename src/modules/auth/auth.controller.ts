@@ -2,9 +2,9 @@ import { Body, Controller, Delete, Get, Post, Put } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { AuthUserDto } from "src/dtos/authUser.dto";
 import { CreateUserDto } from "src/dtos/createUser.dto";
-import { CreateAdminDto } from "src/dtos/createAdmin.dto";
 import { ApiTags } from "@nestjs/swagger";
 import { config as dotenvConfig } from "dotenv";
+import { Users } from "src/entities/users.entity";
 
 dotenvConfig({ path: ".env.development" });
 
@@ -14,7 +14,8 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get()
-  getAdminUser(@Body() user: CreateAdminDto) {
+  getAdminUser() {
+    const user = new Users()
     user.role = Boolean(process.env.ADMIN_ROLE)
     user.name= process.env.ADMIN_USERNAME
     user.email= process.env.ADMIN_EMAIL

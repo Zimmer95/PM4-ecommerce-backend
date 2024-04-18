@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["/bin/bash", "-c", "npm run migration:generate src/migrations/initial_on_render && npm run migration:run && npm run start"]
+CMD ["/bin/bash", "-c", "npm run migration:run && npm run start"]
