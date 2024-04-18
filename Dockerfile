@@ -8,13 +8,11 @@ RUN npm install
 
 COPY . ./
 
-
 EXPOSE 3000
-# Agregar el comando para ejecutar el script de migraciones
+
+CMD ["npm", "run", "start"]
+
 
 COPY migration.sh .
 RUN chmod +x migration.sh
 RUN ./migration.sh
-
-
-CMD ["npm", "run", "start"]
