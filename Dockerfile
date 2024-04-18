@@ -2,13 +2,16 @@ FROM node
 
 WORKDIR /app
 
-COPY ./package*.json ./
+COPY package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY . ./
 
-RUN npm run migrations:run
+# Agregar el comando para ejecutar el script de migraciones
+COPY migrate.sh .
+RUN chmod +x migrate.sh
+RUN ./migrate.sh
 
 EXPOSE 3000
 
