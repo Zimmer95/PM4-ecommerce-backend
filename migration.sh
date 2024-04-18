@@ -8,4 +8,4 @@ done
 
 # Ejecuta las migraciones
 echo 'Ejecutando migraciones...'
-npm run migrations:run
+echo npm run migrations:run
