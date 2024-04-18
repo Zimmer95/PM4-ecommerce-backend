@@ -6,5 +6,5 @@ export class CreateAdminDto extends PartialType(PickType(UsersDto, [
   "email",
   "password",
 ])) {
-  role: string;
+  role: boolean;
 }
