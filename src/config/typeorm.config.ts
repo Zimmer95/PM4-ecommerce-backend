@@ -4,7 +4,7 @@ import { registerAs } from "@nestjs/config";
 
 dotenvConfig({ path: ".env.development" });
 const TypeOrmConfig = {
-  database: "postgres" || process.env.DB_NAME,
+  database: process.env.DB_NAME,
   type: "postgres",
   host: process.env.DB_HOST,
   port: 5432,
@@ -14,7 +14,6 @@ const TypeOrmConfig = {
   migrations: ["dist/migrations/*{.ts,.js}"],
   autoLoadEntities: true,
   synchronize: true,
-  dropSchema: true,
   logging: true,
 };
 

@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  app-ecommerce-zimmer95:
+    image: zimmer95/ecommerce:latest
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.development
+    depends_on:
+      - db-ecommerce-zimmer95
+
+  db-ecommerce-zimmer95:
+    image: "postgres"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env.development
+
+volumes:
+  pgdata:
