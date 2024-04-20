@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { ProductsDto } from "src/dtos/products.dto";
 import { Files } from "src/entities/files.entity";
 import { Products } from "src/entities/products.entity";
 import { Repository } from "typeorm";
@@ -33,5 +34,9 @@ export class FilesService {
     newfile.product = product;
 
     return await this.filesRepository.save(newfile);
+  }
+
+  async deleteFile(fileid: string) {
+    return await this.filesRepository.delete(fileid);
   }
 }

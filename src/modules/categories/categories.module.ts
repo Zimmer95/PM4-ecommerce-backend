@@ -5,6 +5,8 @@ import { Categories } from "src/entities/categories.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { CategoriesRepository } from "./categories.repository";
 import { preloadProducts } from "src/helpers/data";
+import { Files } from "src/entities/files.entity";
+import { FilesService } from "../files/localDbFiles.service";
 
 @Module({
   imports: [TypeOrmModule.forFeature([Categories]), ],

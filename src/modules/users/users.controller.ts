@@ -27,13 +27,6 @@ import { ApiTags } from "@nestjs/swagger";
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  //no devuelve rol ni pass
-  @Post()
-  @UsePipes(new ValidationPipe({ transform: true }))
-  addUser(@Body() user: CreateUserDto) {
-    return this.usersService.addUser(user);
-  }
-
   @Get()
   @UseGuards(RolesGuard)
   @Roles(Role.admin)
@@ -44,13 +37,17 @@ export class UsersController {
     return this.usersService.getUsers();
   }
 
-  //no devuelve rol ni pass
   @Get(":id")
   getUserById(@Param("id", ParseUUIDPipe) id: string) {
     return this.usersService.getUserById(id);
   }
 
-  //no devuelve rol ni pass
+  @Post()
+  @UsePipes(new ValidationPipe({ transform: true }))
+  addUser(@Body() user: CreateUserDto) {
+    return this.usersService.addUser(user);
+  }
+  
   @Put(":id")
   updateUser(@Param("id") id: string, @Body() user: UpdateUserDto) {
     return this.usersService.updateUser(id, user);

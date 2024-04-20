@@ -14,6 +14,8 @@ import { Categories } from "src/entities/categories.entity";
 import { Products } from "src/entities/products.entity";
 import { preloadProducts } from "src/helpers/data";
 import { CategoriesService } from "../categories/categories.service";
+import { Files } from "src/entities/files.entity";
+import { FilesService } from "../files/localDbFiles.service";
 
 @Module({
   imports: [
@@ -23,6 +25,7 @@ import { CategoriesService } from "../categories/categories.service";
       Users,
       Categories,
       Products,
+      Files
     ]),
   ],
   controllers: [OrderDetailsController],
@@ -35,6 +38,7 @@ import { CategoriesService } from "../categories/categories.service";
     ProductsRepository,
     CategoriesRepository,
     CategoriesService,
+    FilesService
   ],
 })
 export class OrderDetailsModule {}

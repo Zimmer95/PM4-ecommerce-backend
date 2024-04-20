@@ -20,12 +20,8 @@ import { requiresAuth } from "express-openid-connect";
     FilesService,
     ProductsRepository,
     CategoriesRepository,
-    CategoriesService
+    CategoriesService,
   ],
   controllers: [ProductsController],
 })
-export class ProductsModule {
-  configure(consumer : MiddlewareConsumer) {
-    consumer.apply(requiresAuth()).forRoutes("products/admin")
-  }
-}
+export class ProductsModule {}

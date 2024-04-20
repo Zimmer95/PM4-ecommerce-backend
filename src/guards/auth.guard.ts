@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   CanActivate,
   ExecutionContext,
   Injectable,
@@ -8,7 +7,6 @@ import {
 import { JwtService } from "@nestjs/jwt";
 import { Request } from "express";
 import { Observable } from "rxjs";
-import { Role } from "src/modules/auth/role.enum";
 
 async function validateRequest(request: Request) {}
 
@@ -38,8 +36,9 @@ export class AuthGuard implements CanActivate {
       const payload = this.jwtService.verify(token, { secret });
       payload.iat = new Date(payload.iat * 1000);
       payload.exp = new Date(payload.exp * 1000);
+      
       request.user = payload;
-      console.log("Estamos del otro lado", request.user);
+      
       return request.user;
     } catch (error) {
       throw new UnauthorizedException("Invalid token");

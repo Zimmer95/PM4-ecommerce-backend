@@ -34,14 +34,22 @@ export class AuthService {
       throw new BadRequestException("Invalid password");
     }
 
+    const role = () => {
+      if (user.role) {
+        return "admin";
+      } else {
+        return "user";
+      }
+    };
+
     const userPayload = {
       sub: user.id,
       id: user.id,
       email: user.email,
-      role: user.role,
+      role: role()
     };
+    
     const token = this.jwtService.sign(userPayload);
-
     return { success: "Successfully generated token", token: token };
   }
 }

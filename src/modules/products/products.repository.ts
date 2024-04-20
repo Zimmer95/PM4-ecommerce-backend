@@ -1,23 +1,53 @@
-import { Inject, Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
+import {
+  BadRequestException,
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
+import { InjectConnection, InjectRepository } from "@nestjs/typeorm";
 import { UpdateProductsDto } from "src/dtos/updateProducts.dto";
 import { ProductsDto } from "src/dtos/products.dto";
 import { Categories } from "src/entities/categories.entity";
 import { Products } from "src/entities/products.entity";
-import { Repository } from "typeorm";
+import { Connection, DataSource, Repository, getConnection } from "typeorm";
 import { CategoriesService } from "../categories/categories.service";
+import { FilesService } from "../files/localDbFiles.service";
+import { conectionSource } from "src/config/typeorm.config";
 
 @Injectable()
 export class ProductsRepository {
   constructor(
     private readonly categoriesService: CategoriesService,
+    private readonly filesService: FilesService,
     @InjectRepository(Products)
     private productsRepository: Repository<Products>,
     @InjectRepository(Categories)
     private categoriesRepository: Repository<Categories>,
     @Inject("ProductsData")
-    private data
+    private data,
+    private dataSource: DataSource
   ) {}
+
+  async getProducts() {
+    return await this.productsRepository.find({
+      relations: ["categories", "files"],
+    });
+  }
+
+  async getProductById(id: string) {
+    return await this.productsRepository.findOne({
+      where: { id: id },
+      relations: ["categories", "files"],
+    });
+  }
+
+  async getProductsByName(name: string) {
+    return await this.productsRepository.findOne({
+      where: { name: name },
+      relations: ["categories", "files"],
+    });
+  }
 
   async addProduct(product: ProductsDto) {
     const duplicatedProduct = await this.productsRepository.findOne({
@@ -25,7 +55,9 @@ export class ProductsRepository {
     });
 
     if (duplicatedProduct) {
-      throw new Error(`Product ${product.name} is already in the database.`);
+      throw new ConflictException(
+        `Product ${product.name} is already in the database.`
+      );
     }
 
     const category = await this.categoriesRepository.findOne({
@@ -33,11 +65,10 @@ export class ProductsRepository {
     });
 
     if (!category) {
-      throw new Error(
+      throw new NotFoundException(
         `Categoría no encontrada para el producto ${product.name}`
       );
     }
-    console.log(category.id);
 
     const newProduct = new Products();
     newProduct.categories = category;
@@ -46,88 +77,124 @@ export class ProductsRepository {
     newProduct.stock = product.stock;
     newProduct.price = product.price;
     newProduct.description = product.description;
+
     const savedProduct = await this.productsRepository.save(newProduct);
 
     return savedProduct;
   }
 
-  async preloadProducts(): Promise<ProductsDto[]> {
-    const products = this.data.map(async (productData) => {
-      const category = await this.categoriesRepository.findOne({
-        where: { name: productData.category },
-      });
+  async preloadProducts() {
+    const products = await Promise.all(
+      this.data.map(async (productData) => {
+        const existingProduct = await this.productsRepository.findOne({
+          where: { name: productData.preloadProducts },
+        });
 
-      if (!category) {
-        throw new Error(
-          `Categoría no encontrada para el producto ${productData.name}`
-        );
-      }
+        if (existingProduct) {
+          throw new ConflictException(
+            `Product ${existingProduct.name} is already in the database.`
+          );
+        }
 
-      productData.categories = category;
-      const newProduct = this.productsRepository.create(productData);
+        const category = await this.categoriesRepository.findOne({
+          where: { name: productData.category },
+        });
 
-      return await this.productsRepository.save(newProduct);
-    });
+        if (!category) {
+          throw new NotFoundException(
+            `Category not found  ${productData.category}`
+          );
+        }
 
-    return Promise.all(products);
-  }
+        productData.categories = category;
 
-  async getProducts() {
-    return await this.productsRepository.find({
-      relations: ["files"],
-    });
-  }
+        const newProduct = this.productsRepository.create(productData);
 
-  async getProductById(id: string) {
-    return await this.productsRepository.findOne({
-      where: { id: id },
-      relations: [ "categories"],
-    });
-  }
+        return await this.productsRepository.save(newProduct);
+      })
+    );
 
-  async getProductsByName(name: string) {
-    return await this.productsRepository.findOne({
-      where: { name: name },
-      relations: ["files"],
-    });
+    return products;
   }
 
   async updateProduct(
     { name, price, stock, description, imgUrl, category }: UpdateProductsDto,
     id: string
   ) {
-    console.log(category);
-
     const foundProduct = await this.productsRepository.findOne({
       where: { id: id },
+      relations: ["categories"],
     });
 
     if (!foundProduct) {
-      throw new NotFoundException("Product not found");
+      throw new NotFoundException(`Product not found`);
     }
 
     if (category) {
       const cat = await this.categoriesService.getCategoriesByName(category);
       foundProduct.categories = cat[0];
-      console.log(cat);
+    }
+    try {
+      const updatedProduct = await this.productsRepository.update(id, {
+        name,
+        price,
+        stock,
+        description,
+        imgUrl,
+      });
+      return updatedProduct;
+    } catch (error) {
+      throw new BadRequestException("something went wrong");
+    }
+  }
+
+  async deleteProduct(productId: string) {
+    /*     const product = await this.productsRepository.findOne({
+      where: { id: productId },
+      relations: ["files", "orderDetails"],
+    });
+
+    if (!product) {
+      throw new NotFoundException("Product not found");
     }
 
-    foundProduct.name = name;
-    foundProduct.price = price;
-    foundProduct.stock = stock;
-    foundProduct.description = description;
-    foundProduct.imgUrl = imgUrl;
+    if (product.files && product.files.length > 0) {
+      const fileIds = product.files.map((file) => file.id);
+      await Promise.all(
+        fileIds.map((fileId) => this.filesService.deleteFile(fileId))
+      );
+    }
 
-    const updatedProduct = await this.productsRepository.update(
-      { id: id },
-      foundProduct
+    const orderDetailsIds = product.orderDetails.map(
+      (orderDetails) => orderDetails.id
     );
+    console.log(orderDetailsIds);
 
-    console.log(updatedProduct);
+    const queryRunner = this.dataSource.createQueryRunner();
 
-    return updatedProduct;
-  }
-  deleteProduct(id: string) {
-    throw new Error("Method not implemented.");
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await queryRunner.query("SET CONSTRAINTS ALL DEFERRED");
+      await queryRunner.query(`DELETE FROM ORDER_DETAILS_PRODUCTS
+      WHERE orderDetailsId = '${orderDetailsIds}' AND productsId = '${productId}';`);
+
+      await queryRunner.query(
+        `DELETE FROM order_details WHERE product_id = '${productId}';`
+      );
+      await queryRunner.query(
+        `DELETE FROM products WHERE id = '${productId}';`
+      );
+      await queryRunner.query("SET CONSTRAINTS ALL IMMEDIATE");
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw new BadRequestException("The transaction cannot be completed");
+    } finally {
+      await queryRunner.release();
+    }
+
+    return product; */
+    return "No estamos del otro lado";
   }
 }

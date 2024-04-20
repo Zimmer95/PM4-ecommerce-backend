@@ -7,13 +7,13 @@ const TypeOrmConfig = {
   database: process.env.DB_NAME,
   type: "postgres",
   host: process.env.DB_HOST,
-  port: 5432,
+  port: 3200,
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   entities: ["dist/entities/*.entity{.ts,.js}"],
   migrations: ["dist/migrations/*{.ts,.js}"],
   autoLoadEntities: true,
-  synchronize: true,
+  synchronize: false,
   logging: true,
 };
 

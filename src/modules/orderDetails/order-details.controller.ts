@@ -10,10 +10,10 @@ import { ApiTags } from "@nestjs/swagger";
 export class OrderDetailsController {
   constructor(private ordersDetailsService: OrderDetailsService) {}
   @Post()
-  addOrderDetail(@Body() orderDetail: OrderDetails) {
+  deleteOrderDetails(@Body() orderDetail: OrderDetails) {
     return this.ordersDetailsService.addOrderDetails(orderDetail);
-  }/* 
-  @Get(":id")
+  }
+ /*  @Get(":id")
   getOrder(@Param() id: Partial<OrderDetails>) {
     return this.ordersDetailsService.getOrderDetails(id);
   } */

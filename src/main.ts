@@ -15,6 +15,7 @@ async function bootstrap() {
     .setDescription("This is the OpenAPI documentation for an eCommerce application created by Zimmer95")
     .setVersion("3.0")
     .addBearerAuth()
+    .addTag("Authorization")
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup("api", app, document);

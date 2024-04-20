@@ -23,16 +23,9 @@ import { ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Products")
 @Controller("products")
-/* @UseGuards(AuthGuard) */
+@UseGuards(AuthGuard)
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
-
-  @Post()
-  @UseGuards(RolesGuard)
-  @Roles(Role.user)
-  addProduct(@Body() product: ProductsDto) {
-    return this.productsService.addProduct(product);
-  }
 
   @Get("seeder")
   @UseGuards(RolesGuard)
@@ -42,9 +35,7 @@ export class ProductsController {
   }
 
   @Get()
-  async getProducts(@Req() req: Request, @Query("name") name?: string) {
-    console.log(JSON.stringify(req));
-
+  async getProducts(@Query("name") name?: string) {
     if (name) {
       const product = await this.productsService.getProductByName(name);
       if (!product) {
@@ -58,6 +49,13 @@ export class ProductsController {
   @Get(":id")
   getProductById(@Param("id") id: string) {
     return this.productsService.getProductById(id);
+  }
+
+  @Post()
+  @UseGuards(RolesGuard)
+  @Roles(Role.admin)
+  addProduct(@Body() product: ProductsDto) {
+    return this.productsService.addProduct(product);
   }
 
   @Put(":id")

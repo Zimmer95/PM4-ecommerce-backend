@@ -3,12 +3,8 @@ import { AuthService } from "./auth.service";
 import { AuthUserDto } from "src/dtos/authUser.dto";
 import { CreateUserDto } from "src/dtos/createUser.dto";
 import { ApiTags } from "@nestjs/swagger";
-import { config as dotenvConfig } from "dotenv";
-import { Users } from "src/entities/users.entity";
 
-dotenvConfig({ path: ".env.development" });
-
-@ApiTags("Auth")
+@ApiTags("Authorization")
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

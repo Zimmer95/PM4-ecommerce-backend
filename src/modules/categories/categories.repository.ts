@@ -22,6 +22,8 @@ export class CategoriesRepository {
       categoriesSet
     ).map((category) => ({ name: category }));
 
+    console.log(categories);
+    
     const loadedCategories: Promise<Categories>[] = categories.map(
       async (category) => {
         const newCategory = this.categoriesRepository.create(category);
