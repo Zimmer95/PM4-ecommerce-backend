@@ -5,43 +5,47 @@ import {
   IsNumber,
   MinLength,
   MaxLength,
-  IsBoolean,
 } from "class-validator";
 
 export class UsersDto {
-  @IsNotEmpty({ message: "El nombre es requerido" })
-  @IsString({ message: "El nombre debe ser una cadena de caracteres" })
-  @MinLength(3, { message: "El nombre debe tener al menos 3 caracteres" })
-  @MaxLength(80, { message: "El nombre no puede superar los 80 caracteres" })
+  @IsNotEmpty({ message: "Name is required" })
+  @IsString({ message: "Name must be a string" })
+  @MinLength(3, { message: "Name must be at least 3 characters long" })
+  @MaxLength(80, { message: "Name cannot exceed 80 characters" })
+  @ApiProperty({ description: "Full name of the user" })
   name: string;
 
-  @IsNotEmpty({ message: "El correo electrónico es requerido" })
-  @IsEmail({}, { message: "Debe proporcionar un correo electrónico válido" })
+  @IsNotEmpty({ message: "Email is required" })
+  @IsEmail({}, { message: "Please provide a valid email address" })
+  @ApiProperty({ description: "Email address of the user" })
   email: string;
 
-  @IsNotEmpty({ message: "La contraseña es requerida" })
-  @IsString({ message: "La contraseña debe ser una cadena de caracteres" })
-  @MinLength(8, { message: "La contraseña debe tener al menos 8 caracteres" })
-  @MaxLength(15, {
-    message: "La contraseña no puede superar los 15 caracteres",
-  })
+  @IsNotEmpty({ message: "Password is required" })
+  @IsString({ message: "Password must be a string" })
+  @MinLength(8, { message: "Password must be at least 8 characters long" })
+  @MaxLength(15, { message: "Password cannot exceed 15 characters" })
+  @ApiProperty({ description: "Password of the user" })
   password: string;
 
-  @IsNumber({}, { message: "El teléfono debe ser un número" })
+  @IsNumber({}, { message: "Phone must be a number" })
+  @ApiProperty({ description: "Phone number of the user" })
   phone: number;
 
-  @IsString({ message: "El país debe ser una cadena de caracteres" })
-  @MinLength(5, { message: "El país debe tener al menos 5 caracteres" })
-  @MaxLength(20, { message: "El país no puede superar los 20 caracteres" })
-  country: string;
-
-  @IsString({ message: "La dirección debe ser una cadena de caracteres" })
-  @MinLength(5, { message: "La dirección debe tener al menos 5 caracteres" })
-  @MaxLength(80, { message: "La dirección no puede superar los 80 caracteres" })
+  @IsString({ message: "Address must be a string" })
+  @MinLength(5, { message: "Address must be at least 5 characters long" })
+  @MaxLength(80, { message: "Address cannot exceed 80 characters" })
+  @ApiProperty({ description: "Address of the user" })
   address: string;
 
-  @IsString({ message: "La ciudad debe ser una cadena de caracteres" })
-  @MinLength(5, { message: "La ciudad debe tener al menos 5 caracteres" })
-  @MaxLength(20, { message: "La ciudad no puede superar los 20 caracteres" })
+  @IsString({ message: "Country must be a string" })
+  @MinLength(5, { message: "Country must be at least 5 characters long" })
+  @MaxLength(20, { message: "Country cannot exceed 20 characters" })
+  @ApiProperty({ description: "Country of the user" })
+  country: string;
+
+  @IsString({ message: "City must be a string" })
+  @MinLength(5, { message: "City must be at least 5 characters long" })
+  @MaxLength(20, { message: "City cannot exceed 20 characters" })
+  @ApiProperty({ description: "City of the user" })
   city: string;
 }
