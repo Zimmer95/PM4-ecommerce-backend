@@ -6,6 +6,7 @@ import {
   MinLength,
   MaxLength,
 } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class UsersDto {
   @IsNotEmpty({ message: "Name is required" })
