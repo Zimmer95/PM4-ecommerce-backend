@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { ConflictException, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Categories } from "src/entities/categories.entity";
@@ -22,8 +22,16 @@ export class CategoriesRepository {
       categoriesSet
     ).map((category) => ({ name: category }));
 
-    console.log(categories);
-    
+    if (
+      categories.map((category) =>
+        this.categoriesRepository.findOne({ where: { name: category.name } })
+      )
+    ) {
+      throw new ConflictException(
+        "The category already exists in the database"
+      );
+    }
+
     const loadedCategories: Promise<Categories>[] = categories.map(
       async (category) => {
         const newCategory = this.categoriesRepository.create(category);
