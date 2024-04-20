@@ -7,7 +7,7 @@ const TypeOrmConfig = {
   database: process.env.DB_NAME,
   type: "postgres",
   host: process.env.DB_HOST,
-  port: 3200,
+  port: process.env.DB_PORT,
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   entities: ["dist/entities/*.entity{.ts,.js}"],
