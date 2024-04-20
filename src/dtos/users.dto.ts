@@ -9,10 +9,6 @@ import {
 } from "class-validator";
 
 export class UsersDto {
- /**
-   * Name must be a string of at least 3 characters
-   * @example: Strong!(PassWord)
-   */
   @IsNotEmpty({ message: "El nombre es requerido" })
   @IsString({ message: "El nombre debe ser una cadena de caracteres" })
   @MinLength(3, { message: "El nombre debe tener al menos 3 caracteres" })
