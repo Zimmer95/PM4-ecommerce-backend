@@ -26,11 +26,10 @@ import { ApiTags } from "@nestjs/swagger";
 @UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
   @Get()
   @UseGuards(RolesGuard)
   @Roles(Role.admin)
-  getUsers(@Query("name") name?: string) {
+  getUsers(@Query("name" ) name?: string) {
     if (name) {
       return this.usersService.getUserByUsername(name);
     }

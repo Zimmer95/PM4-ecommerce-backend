@@ -15,11 +15,7 @@ export class AuthService {
   ) {}
 
   async signUp(user: CreateUserDto) {
-    if (await this.usersService.getUserByEmail(user.email)) {
-      throw new BadRequestException("The user is already registered");
-    }
-    const newUser = await this.usersService.addUser(user);
-    return newUser;
+    return await this.usersService.addUser(user);
   }
 
   async signIn(authUser: AuthUserDto) {
@@ -46,9 +42,9 @@ export class AuthService {
       sub: user.id,
       id: user.id,
       email: user.email,
-      role: role()
+      role: role(),
     };
-    
+
     const token = this.jwtService.sign(userPayload);
     return { success: "Successfully generated token", token: token };
   }
