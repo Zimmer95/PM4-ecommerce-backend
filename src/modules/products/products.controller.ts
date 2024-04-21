@@ -22,21 +22,19 @@ import { ApiBearerAuth, ApiQuery, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Products")
 @Controller("products")
-@UseGuards(AuthGuard)
-@ApiBearerAuth()
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post("seeder")
+  @UseGuards(AuthGuard)
   @UseGuards(RolesGuard)
-  @Roles(Role.admin) 
+  @Roles(Role.admin)
+  @ApiBearerAuth()
   preloadProducts() {
     return this.productsService.preloadProducts();
   }
 
   @Get()
-  @UseGuards(RolesGuard)
-  @Roles(Role.admin && Role.user)
   @ApiQuery({ name: "name", required: false })
   async getProducts(@Query("name") name?: string) {
     if (name) {
@@ -50,29 +48,37 @@ export class ProductsController {
   }
 
   @Get(":id")
+  @UseGuards(AuthGuard)
   @UseGuards(RolesGuard)
-  @Roles(Role.admin && Role.user)
+  @Roles(Role.admin)
+  @ApiBearerAuth()
   getProductById(@Param("id") id: string) {
     return this.productsService.getProductById(id);
   }
 
   @Post()
+  @UseGuards(AuthGuard)
   @UseGuards(RolesGuard)
   @Roles(Role.admin)
+  @ApiBearerAuth()
   addProduct(@Body() product: ProductsDto) {
     return this.productsService.addProduct(product);
   }
 
   @Put(":id")
+  @UseGuards(AuthGuard)
   @UseGuards(RolesGuard)
   @Roles(Role.admin)
+  @ApiBearerAuth()
   updateProduct(@Param("id") id: string, @Body() product: UpdateProductsDto) {
     return this.productsService.updateProduct(product, id);
   }
 
   @Delete(":id")
+  @UseGuards(AuthGuard)
   @UseGuards(RolesGuard)
   @Roles(Role.admin)
+  @ApiBearerAuth()
   deleteProduct(@Param("id") id: string) {
     return this.productsService.deleteProduct(id);
   }
