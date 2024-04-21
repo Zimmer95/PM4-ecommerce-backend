@@ -22,13 +22,14 @@ import { AuthGuard } from "src/guards/auth.guard";
 import { Roles } from "src/decorators/roles.decorator";
 import { RolesGuard } from "src/guards/roles.guard";
 import { Role } from "../auth/role.enum";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Files")
 @Controller("files")
 @UseGuards(RolesGuard)
 @Roles(Role.admin)
 @UseGuards(AuthGuard)
+@ApiBearerAuth()
 export class FilesController {
   constructor(
     private filesService: FilesService,

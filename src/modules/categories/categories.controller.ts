@@ -9,21 +9,19 @@ import { ApiBearerAuth, ApiQuery, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Categories")
 @Controller("categories")
-@UseGuards(AuthGuard)
-@ApiBearerAuth()
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Get("seeder")
+  @UseGuards(AuthGuard)
   @UseGuards(RolesGuard)
   @Roles(Role.admin)
+  @ApiBearerAuth()
   async preloadCategories() {
     return this.categoriesService.preloadCategories();
   }
 
   @Get()
-  @UseGuards(RolesGuard)
-  @Roles(Role.admin && Role.user)
   @ApiQuery({ name: "name", required: false })
   async getCategories(@Query("name") name?: string) {
     if (name) {
@@ -33,8 +31,10 @@ export class CategoriesController {
   }
 
   @Post()
+  @UseGuards(AuthGuard)
   @UseGuards(RolesGuard)
   @Roles(Role.admin)
+  @ApiBearerAuth()
   async addCategory(@Body() category: CreateCategoriesDto) {
     return this.categoriesService.addCategories(category);
   }
