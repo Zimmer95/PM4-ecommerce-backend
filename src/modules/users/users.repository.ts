@@ -10,7 +10,6 @@ import * as bcrypt from "bcrypt";
 import { Users } from "src/entities/users.entity";
 import { Repository } from "typeorm";
 import { UpdateUserDto } from "src/dtos/updateUsers.dto";
-import { CreateAdminDto } from "src/dtos/createAdmin.dto";
 
 @Injectable()
 export class UsersRepository {
@@ -85,9 +84,9 @@ export class UsersRepository {
     newUser.createdAt = now;
     newUser.password = hashedPassword;
 
-    const { role, ...thisUser } = await this.usersRepository.save(newUser);
+    const { role, name, email, ...thisUser } = await this.usersRepository.save(newUser);
 
-    return thisUser;
+    return {success : `User ${name} created successfully: for loggin use your email: ${email}`};
   }
 
   async updateUser(user: UpdateUserDto, id: string) {

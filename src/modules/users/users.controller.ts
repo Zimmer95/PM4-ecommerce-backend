@@ -19,7 +19,7 @@ import { UpdateUserDto } from "src/dtos/updateUsers.dto";
 import { Roles } from "src/decorators/roles.decorator";
 import { RolesGuard } from "src/guards/roles.guard";
 import { Role } from "../auth/role.enum";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiQuery, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Users")
 @Controller("users")
@@ -29,6 +29,7 @@ export class UsersController {
   @Get()
   @UseGuards(RolesGuard)
   @Roles(Role.admin)
+  @ApiQuery({ name: "name", required: false })
   getUsers(@Param("name") name?: string) {
     if (name) {
       return this.usersService.getUserByUsername(name);

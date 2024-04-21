@@ -18,7 +18,7 @@ import { AuthGuard } from "src/guards/auth.guard";
 import { RolesGuard } from "src/guards/roles.guard";
 import { Role } from "../auth/role.enum";
 import { Roles } from "src/decorators/roles.decorator";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiQuery, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Products")
 @Controller("products")
@@ -37,6 +37,7 @@ export class ProductsController {
   @Get()
   @UseGuards(RolesGuard)
   @Roles(Role.admin && Role.user)
+  @ApiQuery({ name: "name", required: false })
   async getProducts(@Query("name") name?: string) {
     if (name) {
       const product = await this.productsService.getProductByName(name);
