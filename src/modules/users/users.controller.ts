@@ -19,13 +19,15 @@ import { UpdateUserDto } from "src/dtos/updateUsers.dto";
 import { Roles } from "src/decorators/roles.decorator";
 import { RolesGuard } from "src/guards/roles.guard";
 import { Role } from "../auth/role.enum";
-import { ApiQuery, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiQuery, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Users")
 @Controller("users")
 @UseGuards(AuthGuard)
+@ApiBearerAuth()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+  
   @Get()
   @UseGuards(RolesGuard)
   @Roles(Role.admin)
@@ -65,4 +67,5 @@ export class UsersController {
   deleteUser(@Param("id", ParseUUIDPipe) id: string) {
     return this.usersService.deleteUser(id);
   }
+
 }

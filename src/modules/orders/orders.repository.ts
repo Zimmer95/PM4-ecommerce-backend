@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { OrderDetails } from "src/entities/orderDetails.entity";
 import { Orders } from "src/entities/orders.entity";
@@ -85,15 +89,21 @@ export class OrdersRepository {
     return await this.ordersRepository.find();
   }
 
-  async getOrderById(id: string) {
+  async getOrdersByUserId(id: string) {
     try {
-      const order = await this.ordersRepository.findOne({ where: { id: id } });
-      if (!order) {
-        throw new NotFoundException("Order not found");
+      const user = await this.usersRepository.findOne({ where: { id: id } });
+
+      if (!user) {
+        throw new NotFoundException("User not found");
       }
-      return order;
+
+      if (user.orders.length < 1) {
+        throw new ConflictException("User has no orders");
+      }
+
+      return user.orders;
     } catch (error) {
-      throw new NotFoundException("Order not found");
+      throw new NotFoundException("User or orders not found");
     }
   }
 }

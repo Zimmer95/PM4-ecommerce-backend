@@ -9,8 +9,8 @@ export class OrdersService {
   addOrder(order: CreateOrdersDto) {
     return this.ordersRepository.addOrder(order);
   }
-  getOrderById(id: string) {
-    return this.ordersRepository.getOrderById(id);
+  getOrdersByUserId(id: string) {
+    return this.ordersRepository.getOrdersByUserId(id);
   }
   getOrders() {
     return this.ordersRepository.getOrders();

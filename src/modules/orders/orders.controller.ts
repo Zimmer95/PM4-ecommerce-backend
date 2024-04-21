@@ -32,8 +32,8 @@ export class OrdersController {
   @Get(":id")
   @UseGuards(RolesGuard)
   @Roles(Role.admin && Role.user)
-  getOrderById(@Param() id: string) {
-    return this.ordersService.getOrderById(id);
+  getOrdersByUserId(@Param() id: string) {
+    return this.ordersService.getOrdersByUserId(id);
   }
 
   @Get()
