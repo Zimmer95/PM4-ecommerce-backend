@@ -80,7 +80,7 @@ export class OrdersRepository {
 
     return createdOrder;
   }
-  
+
   async getOrders() {
     return await this.ordersRepository.find();
   }

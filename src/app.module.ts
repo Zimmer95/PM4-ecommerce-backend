@@ -5,7 +5,6 @@ import { UsersModule } from "./modules/users/users.module";
 import { CategoriesModule } from "./modules/categories/categories.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { OrdersModule } from "./modules/orders/orders.module";
-import { OrderDetailsModule } from "./modules/orderDetails/order-details.module";
 import { FilesModule } from "./modules/files/files.module";
 import { DateAdder } from "./interceptors/date-adder.interceptor";
 import { APP_INTERCEPTOR } from "@nestjs/core";
@@ -29,7 +28,6 @@ import { JwtModule } from "@nestjs/jwt";
     ProductsModule,
     UsersModule,
     OrdersModule,
-    OrderDetailsModule,
     FilesModule,
     JwtModule.register({
       global: true,

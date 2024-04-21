@@ -6,7 +6,6 @@ import { Orders } from "src/entities/orders.entity";
 import { OrdersRepository } from "./orders.repository";
 import { ProductsRepository } from "../products/products.repository";
 import { Products } from "src/entities/products.entity";
-import { OrderDetailsRepository } from "../orderDetails/order-details.repository";
 import { OrderDetails } from "src/entities/orderDetails.entity";
 import { UsersRepository } from "../users/users.repository";
 import { Users } from "src/entities/users.entity";
@@ -33,7 +32,6 @@ import { FilesService } from "../files/localDbFiles.service";
     OrdersService,
     OrdersRepository,
     ProductsRepository,
-    OrderDetailsRepository,
     UsersRepository,
     CategoriesRepository,
     CategoriesService,

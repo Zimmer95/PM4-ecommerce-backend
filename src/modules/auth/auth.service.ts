@@ -49,6 +49,10 @@ export class AuthService {
     };
 
     const token = this.jwtService.sign(userPayload);
-    return { success: "Successfully generated token", token: token };
+    return {
+      userId: user.id,
+      success: "Successfully generated token",
+      Token: token,
+    };
   }
 }
