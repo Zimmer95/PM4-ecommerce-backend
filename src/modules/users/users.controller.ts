@@ -29,7 +29,7 @@ export class UsersController {
   @Get()
   @UseGuards(RolesGuard)
   @Roles(Role.admin)
-  getUsers(@Query("name" ) name?: string) {
+  getUsers(@Param("name") name?: string) {
     if (name) {
       return this.usersService.getUserByUsername(name);
     }
@@ -37,22 +37,30 @@ export class UsersController {
   }
 
   @Get(":id")
+  @UseGuards(RolesGuard)
+  @Roles(Role.admin && Role.user)
   getUserById(@Param("id", ParseUUIDPipe) id: string) {
     return this.usersService.getUserById(id);
   }
 
   @Post()
+  @UseGuards(RolesGuard)
+  @Roles(Role.admin)
   @UsePipes(new ValidationPipe({ transform: true }))
   addUser(@Body() user: CreateUserDto) {
     return this.usersService.addUser(user);
   }
   
   @Put(":id")
+  @UseGuards(RolesGuard)
+  @Roles(Role.admin && Role.user)
   updateUser(@Param("id") id: string, @Body() user: UpdateUserDto) {
     return this.usersService.updateUser(id, user);
   }
 
   @Delete(":id")
+  @UseGuards(RolesGuard)
+  @Roles(Role.admin && Role.user)
   deleteUser(@Param("id", ParseUUIDPipe) id: string) {
     return this.usersService.deleteUser(id);
   }

@@ -5,7 +5,7 @@ import { Orders } from "src/entities/orders.entity";
 import { Users } from "src/entities/users.entity";
 import { Repository } from "typeorm";
 import { Products } from "src/entities/products.entity";
-import { OrdersDto } from "src/dtos/orders.dto";
+import { CreateOrdersDto } from "src/dtos/createOrder.dto";
 
 @Injectable()
 export class OrdersRepository {
@@ -20,10 +20,10 @@ export class OrdersRepository {
     private usersRepository: Repository<Users>
   ) {}
 
-  async addOrder(order: OrdersDto) {
+  async addOrder(order: CreateOrdersDto) {
     const user = await this.usersRepository.findOne({
       where: { id: order.userId },
-      select: ["id"],
+      select: ["id", "name", "email", "address", "city"],
     });
 
     if (!user) {
@@ -32,13 +32,9 @@ export class OrdersRepository {
 
     const newOrder = new Orders();
     newOrder.user_id = user;
-    console.log(newOrder);
 
-    const { date, ...restoPropiedades } = newOrder;
-    const createdOrder = await this.ordersRepository.save(restoPropiedades);
-
+    const createdOrder = await this.ordersRepository.save(newOrder);
     const productIds = order.products.map((products) => products.id);
-
     const productsArray = await Promise.all(
       productIds.map(async (prodId) => {
         return await this.productsRepository.findOne({
@@ -84,6 +80,7 @@ export class OrdersRepository {
 
     return createdOrder;
   }
+  
   async getOrders() {
     return await this.ordersRepository.find();
   }

@@ -2,6 +2,7 @@ import { ConflictException, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Categories } from "src/entities/categories.entity";
+import { CreateCategoriesDto } from "src/dtos/createCategories.dto";
 
 @Injectable()
 export class CategoriesRepository {
@@ -50,8 +51,10 @@ export class CategoriesRepository {
     return await this.categoriesRepository.find({ where: { name: name } });
   }
 
-  async addCategories(category: Categories) {
-    const createdCategory = this.categoriesRepository.create(category);
+  async addCategories(category: CreateCategoriesDto) {
+    const cat = new Categories();
+    cat.name = category.name;
+    const createdCategory = this.categoriesRepository.create(cat);
     const newCategory = this.categoriesRepository.create(createdCategory);
     return newCategory;
   }

@@ -18,23 +18,25 @@ import { AuthGuard } from "src/guards/auth.guard";
 import { RolesGuard } from "src/guards/roles.guard";
 import { Role } from "../auth/role.enum";
 import { Roles } from "src/decorators/roles.decorator";
-import { Request } from "express";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Products")
 @Controller("products")
 @UseGuards(AuthGuard)
+@ApiBearerAuth()
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Get("seeder")
+  @Post("seeder")
   @UseGuards(RolesGuard)
-  @Roles(Role.admin)
+  @Roles(Role.admin) 
   preloadProducts() {
     return this.productsService.preloadProducts();
   }
 
   @Get()
+  @UseGuards(RolesGuard)
+  @Roles(Role.admin && Role.user)
   async getProducts(@Query("name") name?: string) {
     if (name) {
       const product = await this.productsService.getProductByName(name);
@@ -47,6 +49,8 @@ export class ProductsController {
   }
 
   @Get(":id")
+  @UseGuards(RolesGuard)
+  @Roles(Role.admin && Role.user)
   getProductById(@Param("id") id: string) {
     return this.productsService.getProductById(id);
   }

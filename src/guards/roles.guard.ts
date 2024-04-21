@@ -5,27 +5,18 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { Observable } from "rxjs";
 import { Role } from "src/modules/auth/role.enum";
 
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
-
-  canActivate(
-    context: ExecutionContext
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    const requiredRoles = this.reflector.getAllAndOverride<Role[]>("Roles", [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-
-    const request = context.switchToHttp().getRequest();
+  async validateRoles(request, requiredRoles) {
     const user = request.user;
 
     const hasRole = () =>
       requiredRoles.some((role) => user?.role?.includes(role));
-    const valid = user && user.role && hasRole;
+
+    const valid = user && user.role && hasRole();
 
     if (!valid) {
       throw new UnauthorizedException(
@@ -33,5 +24,18 @@ export class RolesGuard implements CanActivate {
       );
     }
     return true;
+  }
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const requiredRoles = this.reflector.getAllAndOverride<Role[]>("Roles", [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    const request = context.switchToHttp().getRequest();
+    try {
+      return await this.validateRoles(request, requiredRoles);
+    } catch (error) {
+      throw new UnauthorizedException("Authentication failed");
+    }
   }
 }

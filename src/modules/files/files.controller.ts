@@ -39,6 +39,8 @@ export class FilesController {
 
   //cloudinary
   @Post("uploadImage/:id")
+  @UseGuards(RolesGuard)
+  @Roles(Role.admin)
   @UseInterceptors(FileInterceptor("file"))
   @UsePipes(MinSizeValidatorPipe)
   async uploadFile(
@@ -79,6 +81,8 @@ export class FilesController {
 
   //local DB
   @Post("local/:id")
+  @UseGuards(RolesGuard)
+  @Roles(Role.admin)
   @UseInterceptors(FileInterceptor("file"))
   async uploadToLocalDbFile(
     @UploadedFile(

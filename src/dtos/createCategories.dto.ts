@@ -1,11 +1,7 @@
 import { IsNotEmpty, IsString } from "class-validator";
 
-export class CategoriesDto {
+export class CreateCategoriesDto {
   @IsNotEmpty({ message: "The name is required" })
   @IsString()
   name: string;
-
-  @IsNotEmpty({ message: "The name is required" })
-  @IsString()
-  products: string[];
 }

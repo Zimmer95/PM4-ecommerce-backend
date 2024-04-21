@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { OrdersRepository } from "./orders.repository";
-import { OrdersDto } from "src/dtos/orders.dto";
+import { CreateOrdersDto } from "src/dtos/createOrder.dto";
 
 @Injectable()
 export class OrdersService {
   constructor(private ordersRepository: OrdersRepository) {}
 
-  addOrder(order: OrdersDto) {
+  addOrder(order: CreateOrdersDto) {
     return this.ordersRepository.addOrder(order);
   }
   getOrderById(id: string) {

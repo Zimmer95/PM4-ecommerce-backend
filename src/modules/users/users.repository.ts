@@ -60,13 +60,9 @@ export class UsersRepository {
   }
 
   async getUserByEmail(email: string) {
-    const foundUser = await this.usersRepository.findOne({
+    return await this.usersRepository.findOne({
       where: { email: email },
     });
-    if (!foundUser) {
-      throw new NotFoundException("User not found");
-    }
-    return foundUser;
   }
 
   async addUser(user: CreateUserDto) {

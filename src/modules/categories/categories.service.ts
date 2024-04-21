@@ -1,6 +1,6 @@
 import { Controller } from "@nestjs/common";
 import { CategoriesRepository } from "./categories.repository";
-import { Categories } from "src/entities/categories.entity";
+import { CreateCategoriesDto } from "src/dtos/createCategories.dto";
 
 @Controller("service")
 export class CategoriesService {
@@ -15,7 +15,7 @@ export class CategoriesService {
   getCategoriesByName(name: string) {
     return this.categoriesRepository.getCategoriesByName(name);
   }
-  addCategories(category: Categories) {
+  addCategories(category: CreateCategoriesDto) {
     return this.categoriesRepository.addCategories(category);
   }
 }

@@ -22,12 +22,15 @@ export class AuthService {
     const user = await this.usersService.getUserByEmail(authUser.email);
 
     if (!user) {
-      throw new BadRequestException("The user is not registered");
+      throw new BadRequestException("Invalid username or password");
     }
 
-    const isPasswordValid = bcrypt.compare(authUser.password, user.password);
+    const isPasswordValid = await bcrypt.compare(
+      authUser.password,
+      user.password
+    );
     if (!isPasswordValid) {
-      throw new BadRequestException("Invalid password");
+      throw new BadRequestException("Invalid username or password");
     }
 
     const role = () => {

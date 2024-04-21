@@ -1,7 +1,11 @@
-import { PickType } from "@nestjs/swagger";
-import { OrdersDto } from "./orders.dto";
+import { IsArray, IsNotEmpty, IsString } from "class-validator";
 
-export class CreateOrderDto extends PickType(OrdersDto, [
-  "userId",
-  "products",
-]) {}
+export class CreateOrdersDto {
+  @IsNotEmpty({ message: "The name is required" })
+  @IsString({ message: "The received user id must be a string" })
+  userId: string;
+
+  @IsNotEmpty({ message: "The products are required" })
+  @IsArray({ message: "It must be an array of products." })
+  products: [{ id: string }];
+}
