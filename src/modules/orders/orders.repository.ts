@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  BadRequestException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { OrderDetails } from "src/entities/orderDetails.entity";
@@ -32,6 +33,13 @@ export class OrdersRepository {
 
     if (!user) {
       throw new NotFoundException("User not found");
+    }
+
+    const uniqueProductIds = new Set(order.products);
+    if (uniqueProductIds.size !== order.products.length) {
+      throw new BadRequestException(
+        "Duplicate product IDs found. Only one unit of each product is allowed per order."
+      );
     }
 
     const newOrder = new Orders();
